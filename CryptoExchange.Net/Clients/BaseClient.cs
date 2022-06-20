@@ -45,7 +45,8 @@ namespace CryptoExchange.Net
         private static readonly JsonSerializer defaultSerializer = JsonSerializer.Create(new JsonSerializerSettings
         {
             DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-            Culture = CultureInfo.InvariantCulture
+            Culture = CultureInfo.InvariantCulture,
+            NullValueHandling = NullValueHandling.Ignore,
         });
 
         /// <summary>

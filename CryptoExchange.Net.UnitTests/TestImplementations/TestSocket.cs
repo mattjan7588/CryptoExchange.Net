@@ -13,9 +13,15 @@ namespace CryptoExchange.Net.UnitTests.TestImplementations
         public bool Connected { get; set; }
 
         public event Action OnClose;
+
+#pragma warning disable 0067
+        public event Action OnReconnected;
+        public event Action OnReconnecting;
+#pragma warning restore 0067
         public event Action<string> OnMessage;
         public event Action<Exception> OnError;
         public event Action OnOpen;
+        public Func<Task<Uri>> GetReconnectionUrl { get; set; }
 
         public int Id { get; }
         public bool ShouldReconnect { get; set; }
@@ -93,6 +99,7 @@ namespace CryptoExchange.Net.UnitTests.TestImplementations
         {
             Connected = false;
             DisconnectTime = DateTime.UtcNow;
+            Reconnecting = true;
             OnClose?.Invoke();
         }
 
@@ -115,11 +122,6 @@ namespace CryptoExchange.Net.UnitTests.TestImplementations
         {
             OnError?.Invoke(error);
         }
-
-        public async Task ProcessAsync()
-        {
-            while (Connected)
-                await Task.Delay(50);
-        }
+        public Task ReconnectAsync() => Task.CompletedTask;
     }
 }
